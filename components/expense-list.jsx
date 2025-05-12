@@ -1,16 +1,17 @@
 "use client";
 
+import React from 'react';
 import { useConvexQuery, useConvexMutation } from "@/hooks/use-convex-query";
 import { api } from "@/convex/_generated/api";
 import { format } from "date-fns";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { getCategoryById } from "@/lib/expense-categories";
-import { getCategoryIcon } from "@/lib/expense-categories";
+import { getCategoryById, getCategoryIcon } from "@/lib/expense-categories";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import RupeeIcon from "../components/ui/RupeeIcon"; // Import the RupeeIcon component
 
 export function ExpenseList({
   expenses,
@@ -114,8 +115,9 @@ export function ExpenseList({
 
                 <div className="flex items-center gap-2">
                   <div className="text-right">
-                    <div className="font-medium">
-                      ${expense.amount.toFixed(2)}
+                    <div className="font-medium flex items-center justify-end gap-1.5">
+                      <RupeeIcon size={20} /> {/* Use RupeeIcon here */}
+                      <span>{expense.amount.toFixed(2)}</span>
                     </div>
                     {isGroupExpense ? (
                       <Badge variant="outline" className="mt-1">
@@ -175,8 +177,11 @@ export function ExpenseList({
                           </AvatarFallback>
                         </Avatar>
                         <span>
-                          {isCurrentUser ? "You" : splitUser.name}: $
-                          {split.amount.toFixed(2)}
+                          {isCurrentUser ? "You" : splitUser.name}:
+                          <span className="ml-1.5 flex items-center gap-1.5">
+                            <RupeeIcon size={16} />
+                            {split.amount.toFixed(2)}
+                          </span>
                         </span>
                       </Badge>
                     );

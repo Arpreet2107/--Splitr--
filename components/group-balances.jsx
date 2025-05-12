@@ -1,19 +1,21 @@
 "use client";
 
+import React from 'react';
 import { useConvexQuery } from "@/hooks/use-convex-query";
 import { api } from "@/convex/_generated/api";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArrowUpCircle, ArrowDownCircle } from "lucide-react";
+import RupeeIcon from "../components/ui/RupeeIcon"; // Import RupeeIcon
 
 /**
  * Expected `balances` shape (one object per member):
  * {
- *   id:           string;           // user id
- *   name:         string;
- *   imageUrl?:    string;
- *   totalBalance: number;           // + ve ⇒ they are owed, – ve ⇒ they owe
- *   owes:   { to: string;   amount: number }[];  // this member → others
- *   owedBy: { from: string; amount: number }[];  // others → this member
+ * id:          string;          // user id
+ * name:        string;
+ * imageUrl?:    string;
+ * totalBalance: number;          // +ve => they are owed, -ve => they owe
+ * owes:  { to: string;  amount: number }[]; // this member -> others
+ * owedBy: { from: string; amount: number }[]; // others -> this member
  * }
  */
 export function GroupBalances({ balances }) {
@@ -66,22 +68,33 @@ export function GroupBalances({ balances }) {
             me.totalBalance > 0
               ? "text-green-600"
               : me.totalBalance < 0
-                ? "text-red-600"
-                : ""
+              ? "text-red-600"
+              : ""
           }`}
         >
-          {me.totalBalance > 0
-            ? `+$${me.totalBalance.toFixed(2)}`
-            : me.totalBalance < 0
-              ? `-$${Math.abs(me.totalBalance).toFixed(2)}`
-              : "$0.00"}
+          {me.totalBalance > 0 ? (
+            <span className="flex items-center justify-center gap-1.5">
+              <RupeeIcon size={24} />
+              +{me.totalBalance.toFixed(2)}
+            </span>
+          ) : me.totalBalance < 0 ? (
+            <span className="flex items-center justify-center gap-1.5">
+              <RupeeIcon size={24} />
+              -{Math.abs(me.totalBalance).toFixed(2)}
+            </span>
+          ) : (
+            <span className="flex items-center justify-center gap-1.5">
+              <RupeeIcon size={24} />
+              0.00
+            </span>
+          )}
         </p>
         <p className="text-sm text-muted-foreground mt-1">
           {me.totalBalance > 0
             ? "You are owed money"
             : me.totalBalance < 0
-              ? "You owe money"
-              : "You are all settled up"}
+            ? "You owe money"
+            : "You are all settled up"}
         </p>
       </div>
 
@@ -113,8 +126,9 @@ export function GroupBalances({ balances }) {
                       </Avatar>
                       <span className="text-sm">{member.name}</span>
                     </div>
-                    <span className="font-medium text-green-600">
-                      ${member.amount.toFixed(2)}
+                    <span className="font-medium text-green-600 flex items-center gap-1.5">
+                      <RupeeIcon size={20} />
+                      {member.amount.toFixed(2)}
                     </span>
                   </div>
                 ))}
@@ -144,8 +158,9 @@ export function GroupBalances({ balances }) {
                       </Avatar>
                       <span className="text-sm">{member.name}</span>
                     </div>
-                    <span className="font-medium text-red-600">
-                      ${member.amount.toFixed(2)}
+                    <span className="font-medium text-red-600 flex items-center gap-1.5">
+                      <RupeeIcon size={20} />
+                      {member.amount.toFixed(2)}
                     </span>
                   </div>
                 ))}
